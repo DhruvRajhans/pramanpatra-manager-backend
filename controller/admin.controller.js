@@ -77,9 +77,13 @@ module.exports.get_pramanpatra_to_edit = (req, res) => {
                 writeLogFile(dataErr, 'get_pramanpatra_to_edit-data');
                 return res.status(400).send("Error fetching pramanpatra_to_edit data" + dataErr);
             }
+            const parsedData = dataResult.map(row => ({
+                ...row,
+                familymembers: row.familymembers ? JSON.parse(row.familymembers) : [] // Parse JSON, fallback to empty array if null
+            }));
 
             res.status(200).json({
-                data: dataResult.rows
+                data: parsedData
             });
         });
     } catch (error) {
