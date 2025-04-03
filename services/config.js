@@ -6,12 +6,12 @@ module.exports.multer = require("multer");
 module.exports.path = require("path");
 module.exports.session = require('express-session');
 module.exports.myCache = new NodeCache();
-var {pool} = require('../services/db.service');
+var { pool } = require('../services/db.service');
 module.exports.pool = pool;
 module.exports.cacheTimeout = 3000000;
-module.exports.https = require('https'); 
+module.exports.https = require('https');
 const express = require('express');
-var rootPath = "../NODE_SERVER";
+var rootPath = "../";
 
 var app = express();
 module.exports.app = app;
