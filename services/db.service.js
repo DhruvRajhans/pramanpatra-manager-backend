@@ -2,12 +2,12 @@ const mysql = require('mysql2');
 
 // Database connection settings
 const dbConfig = {
-    host: '45.152.46.204',
-    user: 'u979817283_SauravRajhans',
-    password: 'by?vFyO?0',
-    database: 'u979817283_Certificate_Ma',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     multipleStatements: true,
-    port: 3306,
+    port: process.env.DB_PORT || 3306,
 };
 
 // Connection pool for multiple connections
