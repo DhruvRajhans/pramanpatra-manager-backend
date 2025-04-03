@@ -9,10 +9,12 @@ const login = async (req, res) => {
         const { email, password } = req.body;
 
         // Fetch user from PostgreSQL
-        const query = 'SELECT "User_id","Access_Level", "User_Email", "User_Pass", "First_Name" FROM public."Mst_tblUsers" WHERE "User_Email" = $1';
-        const { rows } = await pool.query(query, [email]);
+        // const query = 'SELECT "User_id","Access_Level", "User_Email", "User_Pass", "First_Name" FROM public."Mst_tblUsers" WHERE "User_Email" = $1';
+        // const { rows } = await pool.query(query, [email]);
+        const query = 'SELECT User_id, Access_Level, User_Email, User_Pass, First_Name FROM Mst_tblUsers WHERE User_Email = ?';
+        const [rows] = await pool.promise().query(query, [email]);
 
-
+        console.log(rows);
         // Check if user exists
         if (rows.length === 0) {
             return res.status(403).json({ message: 'Auth failed: email or password is wrong', success: false });

@@ -10,7 +10,6 @@ module.exports.getPramanpatraData = (req, res) => {
         const page = parseInt(req.query.page) || 0;
         const pageSize = parseInt(req.query.pageSize) || 10;
         const offset = page * pageSize;
-
         pool.query('SELECT COUNT(*) as total FROM public.mst_tblpramanpatra', (countErr, countResult) => {
             if (countErr) {
                 writeLogFile(countErr, 'getPramanpatraData-count');
