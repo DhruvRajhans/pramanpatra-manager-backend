@@ -1,25 +1,33 @@
-const { Pool, Client } = require('pg');
+const mysql = require('mysql2');
 
 // Database connection settings
 const dbConfig = {
-    host: 'localhost', // Change if running locally (use 'localhost')
-    user: 'envdev',
-    password: 'Dev@123',
-    database: 'Certificate_Management',
-    port: 5432, // Default PostgreSQL port
-    timezone: 'Asia/Kolkata',
+    host: '45.152.46.204',
+    user: 'u979817283_SauravRajhans',
+    password: 'by?vFyO?0',
+    database: 'u979817283_Certificate_Ma',
+    multipleStatements: true,
+    port: 3306,
 };
 
 // Connection pool for multiple connections
-const pool = new Pool(dbConfig);
+const pool = mysql.createPool({
+    ...dbConfig,
+    waitForConnections: true,
+    connectionLimit: 10, // Adjust based on your server capacity
+    queueLimit: 0
+});
 
-// Single client connection (useful for simple queries)
-const client = new Client(dbConfig);
+// Single connection (if needed)
+const connection = pool.promise();
 
-// Connect the client
-client.connect()
-    .then(() => console.log("✅ connected successfully!"))
-    .catch(err => console.error("❌ connection error:", err.stack));
+// Test connection
+connection.getConnection()
+    .then(conn => {
+        console.log("? MySQL connected successfully!");
+        conn.release();
+    })
+    .catch(err => console.error("? MySQL connection error:", err));
 
 // Export connections
-module.exports = { pool, client };
+module.exports = { pool, connection };
