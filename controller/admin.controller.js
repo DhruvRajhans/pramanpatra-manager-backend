@@ -16,7 +16,7 @@ module.exports.getPramanpatraData = (req, res) => {
                 return res.status(400).send("Error fetching certificate count: " + countErr);
             }
 
-            pool.query(`SELECT ROW_NUMBER() OVER (ORDER BY updated_dt DESC) AS INDEX,
+            pool.query(`SELECT ROW_NUMBER() OVER (ORDER BY updated_dt DESC) AS row_index,
                         pramanpatra_id as प्रमाणपत्र_क्रमांक,
                         prakalp_grast_nav as प्रकल्पग्रस्ताचे_नाव,
                         prakalpa_nav as प्रकल्पाचे_नाव,
