@@ -10,7 +10,7 @@ module.exports.getPramanpatraData = (req, res) => {
         const page = parseInt(req.query.page) || 0;
         const pageSize = parseInt(req.query.pageSize) || 10;
         const offset = page * pageSize;
-        pool.query('SELECT COUNT(*) as total FROM public.mst_tblpramanpatra', (countErr, countResult) => {
+        pool.query('SELECT COUNT(*) as total FROM mst_tblpramanpatra', (countErr, countResult) => {
             if (countErr) {
                 writeLogFile(countErr, 'getPramanpatraData-count');
                 return res.status(400).send("Error fetching certificate count: " + countErr);
@@ -33,7 +33,7 @@ module.exports.getPramanpatraData = (req, res) => {
                         budit_malmata_ghar_number as बुडीत_मालमतेचा_घर_क्रमांक ,
                         budit_malmata_shetra as बुडीत_मालमतेचे_क्षेत्र ,
                         issue_dt
-                    FROM public.mst_tblpramanpatra
+                    FROM mst_tblpramanpatra
                     ORDER BY updated_dt DESC;`, (dataErr, dataResult) => {
                 if (dataErr) {
                     writeLogFile(dataErr, 'getPramanpatraData-data');
@@ -58,7 +58,7 @@ module.exports.getPramanpatraData = (req, res) => {
 module.exports.get_pramanpatra_to_edit = (req, res) => {
     try {
         pool.query(`SELECT *
-                    FROM public.mst_tblpramanpatra
+                    FROM mst_tblpramanpatra
                     WHERE pramanpatra_id = $1 `, [req.query.rowId], (dataErr, dataResult) => {
             if (dataErr) {
                 writeLogFile(dataErr, 'get_pramanpatra_to_edit-data');
@@ -79,7 +79,7 @@ module.exports.get_pramanpatra_to_edit = (req, res) => {
 module.exports.savePramanpatra = async (req, res) => {
     try {
         const query = `
-    INSERT INTO public.mst_tblpramanpatra (
+    INSERT INTO mst_tblpramanpatra (
         issue_dt,
         prakalp_grast_nav,
         prakalpa_nav,
@@ -151,7 +151,7 @@ module.exports.savePramanpatra = async (req, res) => {
 module.exports.updateCertificate = async (req, res) => {
     try {
         const result = await pool.query(
-            `UPDATE public.mst_tblpramanpatra
+            `UPDATE mst_tblpramanpatra
             SET issue_dt = $1,
                 prakalp_grast_nav = $2,
                 prakalpa_nav = $3,
