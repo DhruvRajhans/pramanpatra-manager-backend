@@ -31,6 +31,7 @@ module.exports.getPramanpatraData = (req, res) => {
                             budit_malmata_shetra AS बुडीत_मालमतेचे_क्षेत्र,
                             issue_dt
                         FROM mst_tblpramanpatra
+                        WHERE isactive = 1
                         ORDER BY updated_dt DESC
                         LIMIT ? OFFSET ?;
 `;
@@ -86,6 +87,39 @@ module.exports.get_pramanpatra_to_edit = (req, res) => {
     } catch (error) {
         writeLogFile(error, 'get_pramanpatra_to_edit');
         res.status(500).send("Server error while fetching pramanpatra_to_edit data");
+    }
+};
+
+
+module.exports.discard_pramanpatra = async (req, res) => {
+    const connection = await pool.promise().getConnection();
+    try {
+        await connection.beginTransaction();
+
+        const pramanpatra_id = req.query.rowId;
+
+        // Step 1: Update the main table
+        const updateQuery = `
+            UPDATE mst_tblpramanpatra
+            SET isactive = 0
+            WHERE pramanpatra_id = ?
+        `;
+
+        const values = [
+            pramanpatra_id
+        ];
+
+        const [result] = await pool.promise().query(updateQuery, values);
+
+        await connection.commit();
+
+        res.json({ message: "Certificate discarded successfully!" });
+    } catch (error) {
+        await connection.rollback();
+        console.error("Error discarding certificate:", error);
+        res.status(500).json({ error: "Database update failed" + error });
+    } finally {
+        connection.release();
     }
 };
 
